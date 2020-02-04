@@ -39,6 +39,15 @@ const createEvent = { //  이벤트 달아주는 함수
       });
     });
   },
+  finish() {
+    const finishBtn = document.querySelectorAll('.finish-btn');
+    if (!finishBtn.length) return;
+    finishBtn.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        handle.finishBtnFunc(elem.dataset.idx)
+      })
+    })
+  },
   addTask(val) {
     const obj = {};
     const pendingLs = localstorageF.get('PENDING');
@@ -71,7 +80,7 @@ const utils = { //  utils 관련 함수
   }
 }
 
-const handle = {
+const handle = {  //  로직 함수
   removeBtnFunc(idx) {
     const pendingLs = localstorageF.get('PENDING');
     const result = pendingLs.filter((elem) => {
@@ -79,14 +88,20 @@ const handle = {
     })
     localstorageF.set('PENDING', result);
     render.pendingTasks();
+  },
+  finishBtnFunc(idx) {
+    const pendingLs = localstorageF.get('PENDING');
+    const finishedLs = localstorageF.get('FINISHED');
+
+    // TODO:  여기서 다시 
+    const result = pendingLs.filter((elem) => {
+      return elem.idx !== parseInt(idx)
+    })
+    localstorageF.set('PENDING', result);
   }
 }
 
 function showFinishedTasks() {}
-
-document.querySelector("#pending").addEventListener("click", render.pendingTasks);
-
-document.querySelector("#finish").addEventListener("click", showFinishedTasks);
 
 // addTask
 // finishTask
